@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Threading;
 
 namespace RectangleTrainer.Mesh2Script
 {
@@ -11,7 +12,10 @@ namespace RectangleTrainer.Mesh2Script
         string scriptPrefix = "Mesh";
         string scriptSuffix = "hardcoded";
         string scriptName;
-        static string scriptTemplate;
+        string scriptTemplate = "";
+
+        Mesh2Script scriptMaker;
+        bool refresh = false;
 
         [MenuItem("Rectangle Trainer/Mesh to Script")]
         static void Init()
@@ -21,28 +25,21 @@ namespace RectangleTrainer.Mesh2Script
             window.Show();
         }
 
-        static private void LoadTemplate()
+        private void LoadTemplate()
         {
             string[] templateGuid = AssetDatabase.FindAssets("ScriptMeshTemplate");
             if (templateGuid.Length > 0)
             {
-
                 string templatePath = AssetDatabase.GUIDToAssetPath(templateGuid[0]);
-                Debug.Log(templatePath);
-
                 TextAsset templateAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(templatePath);
                 scriptTemplate = templateAsset.text;
-
-                Debug.Log(scriptTemplate);
             }
-
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             LoadTemplate();
         }
-
         void OnGUI()
         {
             EditorGUI.BeginChangeCheck();
@@ -58,7 +55,8 @@ namespace RectangleTrainer.Mesh2Script
                 EditorGUILayout.LabelField("Script Name", EditorStyles.boldLabel);
                 scriptName = EditorGUILayout.TextField(FormatName(scriptName));
 
-                EditorGUILayout.HelpBox(Filename, MessageType.Info);
+                string helpboxText = $"{Filename}\n~{SizeMaxEstimate()}";
+                EditorGUILayout.HelpBox(helpboxText, MessageType.Info);
             }
 
             EditorGUILayout.LabelField("Save Folder", EditorStyles.boldLabel);
@@ -69,30 +67,78 @@ namespace RectangleTrainer.Mesh2Script
             if (GUILayout.Button("Convert To Script"))
             {
                 if(!AssetDatabase.IsValidFolder($"Assets/{saveFolder}"))
-                {
                     AssetDatabase.CreateFolder("Assets", saveFolder);
-                }
 
                 BuildMeshScript();
 
             }
             EditorGUI.EndDisabledGroup();
+
+            ShowProgressBar();
         }
 
-        private string SizeEstimation()
+        private void ShowProgressBar()
         {
-//            inputMesh.vertexCount;
-            return "";
+            if (scriptMaker == null)
+                return;
+
+            Rect r = EditorGUILayout.BeginVertical();
+            EditorGUI.ProgressBar(r, scriptMaker.status.progress, scriptMaker.status.message);
+            GUILayout.Space(18);
+            EditorGUILayout.EndVertical();
+        }
+
+        private bool InProgress
+        {
+            get => scriptMaker != null && scriptMaker.status.inProgress;
+        }
+
+        private void Update()
+        {
+            if(InProgress)
+            {
+                Repaint();
+            }
+
+            if(refresh)
+            {
+                AssetDatabase.Refresh();
+                refresh = false;
+            }
+        }
+
+        private string SizeMaxEstimate()
+        {
+            int vertSize = inputMesh.vertexCount * 3 * 13 * 2; //three axis, max. floating decimals, commas and space, position and normal
+            int trigSize = inputMesh.triangles.Length * Mathf.CeilToInt(Mathf.Log10(inputMesh.triangles.Length));
+
+            float sum = vertSize + trigSize + scriptTemplate.Length;
+            int kpow = 0;
+
+            while(sum > 1024)
+            {
+                sum /= 1024;
+                kpow++;
+            }
+
+            string[] unit = { "b", "kb", "mb" };
+
+            return $"{sum.ToString("N1")} {unit[kpow]}";
         }
 
         void BuildMeshScript()
         {
+            if(scriptMaker == null)
+            {
+                scriptMaker = new Mesh2Script();
+                scriptMaker.OnComplete += () => refresh = true;
+            }
+
             string path = "Assets/" + Filename;
 
-            StreamWriter writer = new StreamWriter(path, true);
-            writer.WriteLine(Mesh2Script.ConvertToScript(inputMesh, Classname, scriptTemplate));
-            writer.Close();
-            AssetDatabase.Refresh();
+            scriptMaker.Initialize(path, Classname, scriptTemplate);
+            scriptMaker.ConvertToScript(inputMesh);
+
         }
 
         string Filename
