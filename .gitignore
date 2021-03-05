@@ -1,0 +1,17 @@
+# Ignore all
+/*
+.DS_Store
+.AppleDouble
+.LSOverride
+/Assets/RT Hardcoded Meshes/
+
+# Files to not ignore
+!/.gitignore
+!/.README.md
+!/Assembly-CSharp.csproj
+!/Assembly-CSharp-Editor.csproj
+!/Mesh2CS.sln
+
+# Folder to not ignore
+!/Assets/
+!/ReadmeImg/
