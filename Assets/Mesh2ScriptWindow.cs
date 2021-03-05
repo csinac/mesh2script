@@ -11,15 +11,36 @@ namespace RectangleTrainer.Mesh2Script
         string scriptPrefix = "Mesh";
         string scriptSuffix = "hardcoded";
         string scriptName;
+        static string scriptTemplate;
 
-        // Add menu named "My Window" to the Window menu
         [MenuItem("Rectangle Trainer/Mesh to Script")]
         static void Init()
         {
-            // Get existing open window or if none, make a new one:
             Mesh2ScriptWindow window = (Mesh2ScriptWindow)GetWindow(typeof(Mesh2ScriptWindow));
             window.titleContent = new GUIContent("Mesh to Script");
             window.Show();
+        }
+
+        static private void LoadTemplate()
+        {
+            string[] templateGuid = AssetDatabase.FindAssets("ScriptMeshTemplate");
+            if (templateGuid.Length > 0)
+            {
+
+                string templatePath = AssetDatabase.GUIDToAssetPath(templateGuid[0]);
+                Debug.Log(templatePath);
+
+                TextAsset templateAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(templatePath);
+                scriptTemplate = templateAsset.text;
+
+                Debug.Log(scriptTemplate);
+            }
+
+        }
+
+        private void Awake()
+        {
+            LoadTemplate();
         }
 
         void OnGUI()
@@ -52,7 +73,7 @@ namespace RectangleTrainer.Mesh2Script
                     AssetDatabase.CreateFolder("Assets", saveFolder);
                 }
 
-                WriteString();
+                BuildMeshScript();
 
             }
             EditorGUI.EndDisabledGroup();
@@ -64,12 +85,12 @@ namespace RectangleTrainer.Mesh2Script
             return "";
         }
 
-        void WriteString()
+        void BuildMeshScript()
         {
             string path = "Assets/" + Filename;
 
             StreamWriter writer = new StreamWriter(path, true);
-            writer.WriteLine(Mesh2Script.ConvertToScript(inputMesh, Classname));
+            writer.WriteLine(Mesh2Script.ConvertToScript(inputMesh, Classname, scriptTemplate));
             writer.Close();
             AssetDatabase.Refresh();
         }

@@ -57,12 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Mesh2Script.cs" />
+    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Sphere_hardcoded.cs" />
+    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Cube_hardcoded.cs" />
     <Compile Include="Assets/Mesh2ScriptWindow.cs" />
     <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Capsule_hardcoded.cs" />
-    <Compile Include="Assets/RT Hardcoded Meshes/NewBehaviourScript.cs" />
-    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Cylinder_hardcoded.cs" />
+    <Compile Include="Assets/LoadScriptedMesh.cs" />
   </ItemGroup>
   <ItemGroup>
+     <None Include="Assets/ScriptMeshTemplate.txt" />
     <Reference Include="UnityEngine">
       <HintPath>/Applications/Unity/Hub/Editor/2020.1.14f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

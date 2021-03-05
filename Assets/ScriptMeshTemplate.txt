@@ -1,0 +1,56 @@
+﻿using UnityEngine;
+namespace RectangleTrainer.Mesh2Script.ScriptMesh
+{{
+	public static class {0}
+	{{
+		private static Mesh mesh;
+
+        private static float[] vertList = 
+		{{
+            {1}
+		}};
+
+		private static int[] triangles =
+		{{
+            {2}
+		}};
+
+        private static float[] nList = 
+		{{
+            {3}
+		}};
+
+		public static Mesh Mesh
+		{{
+			get
+			{{
+				if (mesh == null)
+					mesh = Make();
+
+				return mesh;
+			}}
+		}}
+
+        private static Vector3[] FloatListToVector(ref float[] list) {{
+			Vector3[] vectorArray = new Vector3[list.Length / 3];
+            for(int i = 0; i < vectorArray.Length; i ++) {{
+                vectorArray[i] = new Vector3(list[i * 3], list[i * 3 + 1], list[i * 3 + 2]);
+            }}
+
+            return vectorArray;
+        }}
+
+		private static Mesh Make()
+		{{
+			Vector3[] vertices = FloatListToVector(ref vertList);
+			Vector3[] normals = FloatListToVector(ref nList);
+
+			Mesh mesh = new Mesh();
+			mesh.vertices = vertices;
+			mesh.triangles = triangles;
+			mesh.normals = normals;
+
+			return mesh;
+		}}
+	}}
+}}
