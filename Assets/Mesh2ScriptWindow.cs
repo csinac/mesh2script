@@ -23,6 +23,7 @@ namespace RectangleTrainer.Mesh2Script
             Mesh2ScriptWindow window = (Mesh2ScriptWindow)GetWindow(typeof(Mesh2ScriptWindow));
             window.titleContent = new GUIContent("Mesh to Script");
             window.Show();
+            window.minSize = new Vector2(200, 230);
         }
 
         private void LoadTemplate()

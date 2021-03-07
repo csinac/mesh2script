@@ -10,19 +10,7 @@ namespace RectangleTrainer.Mesh2Script
     {
         public struct Status
         {
-            private string _message;
-            public string message
-            {
-                get
-                {
-                    return _message;
-                }
-                set
-                {
-                    _message = value;
-                    progress = 0;
-                }
-            }
+            public string message;
             public float progress;
             public bool inProgress;
         }
@@ -46,11 +34,11 @@ namespace RectangleTrainer.Mesh2Script
             this.template = template;
         }
 
-        public void ConvertToScript(Mesh mesh)
+        public void ConvertToScript(Vector3[] vertices, Vector3[] normals, int[] triangles)
         {
-            vertices = mesh.vertices;
-            normals = mesh.normals;
-            triangles = mesh.triangles;
+            this.vertices = vertices;
+            this.normals = normals;
+            this.triangles = triangles;
 
             status.inProgress = true;
 
@@ -59,15 +47,17 @@ namespace RectangleTrainer.Mesh2Script
 
         }
 
+        public void ConvertToScript(Mesh mesh) => ConvertToScript(mesh.vertices, mesh.normals, mesh.triangles);
+
         public event Action OnComplete;
 
         public void Run()
         {
-            status.message = "Writing vertices.";
+            UpdateStatus("Writing vertices.");
             string vertStr = ArrayToString(vertices);
-            status.message = "Writing triangles.";
+            UpdateStatus("Writing triangles.");
             string trigStr = ArrayToString(triangles);
-            status.message = "Writing normals.";
+            UpdateStatus("Writing normals.");
             string normStr = ArrayToString(normals);
 
             string output = string.Format(template, classname, vertStr, trigStr, normStr);
@@ -79,6 +69,13 @@ namespace RectangleTrainer.Mesh2Script
             status.message = "Done!";
             status.inProgress = false;
             OnComplete?.Invoke();
+        }
+
+        private void UpdateStatus(string message, float progress = 0)
+        {
+            status.message = message;
+            status.progress = progress;
+            Debug.Log($"{classname}: {message}");
         }
 
         private string ArrayToString(Vector3[] array) {

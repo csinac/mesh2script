@@ -57,13 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Mesh2Script.cs" />
-    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Sphere_hardcoded.cs" />
     <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Cube_hardcoded.cs" />
-    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Quad_hardcoded.cs" />
     <Compile Include="Assets/Mesh2ScriptWindow.cs" />
-    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_Capsule_hardcoded.cs" />
-    <Compile Include="Assets/LoadScriptedMesh.cs" />
+    <Compile Include="Assets/Demo/LoadScriptMesh.cs" />
     <Compile Include="Assets/RT Hardcoded Meshes/Mesh_default_hardcoded.cs" />
+    <Compile Include="Assets/RT Hardcoded Meshes/Mesh_dragon_hardcoded.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets/ScriptMeshTemplate.txt" />

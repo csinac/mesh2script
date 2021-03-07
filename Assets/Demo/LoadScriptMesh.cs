@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LoadScriptedMesh : MonoBehaviour
+public class LoadScriptMesh : MonoBehaviour
 {
     void Start()
     {
@@ -8,6 +8,6 @@ public class LoadScriptedMesh : MonoBehaviour
         MeshFilter mf = gameObject.AddComponent<MeshFilter>();
         renderer.material = new Material(Shader.Find("Standard"));
 
-        mf.mesh = RectangleTrainer.Mesh2Script.ScriptMesh.Mesh_Sphere_hardcoded.Mesh;
+        mf.mesh = RectangleTrainer.Mesh2Script.ScriptMesh.Mesh_dragon_hardcoded.Mesh;
     }
 }
