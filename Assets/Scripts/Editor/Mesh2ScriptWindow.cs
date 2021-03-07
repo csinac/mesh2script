@@ -8,9 +8,8 @@ namespace RectangleTrainer.Mesh2Script
     public class Mesh2ScriptWindow : EditorWindow
     {
         Mesh inputMesh;
-        string saveFolder = "RT Hardcoded Meshes";
-        string scriptPrefix = "Mesh";
-        string scriptSuffix = "hardcoded";
+        string saveFolder = "RT Script Meshes";
+        string scriptPrefix = "ScriptMesh";
         string scriptName;
         string scriptTemplate = "";
 
@@ -148,7 +147,7 @@ namespace RectangleTrainer.Mesh2Script
         }
         string Classname
         {
-            get => $"{scriptPrefix}_{scriptName}_{scriptSuffix}";
+            get => $"{scriptPrefix}_{scriptName}";
         }
 
         string FormatName(string unformatted)

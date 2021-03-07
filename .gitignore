@@ -3,7 +3,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-/Assets/RT Hardcoded Meshes/
+/Assets/RT Script Meshes/
 
 # Files to not ignore
 !/.gitignore
@@ -11,6 +11,7 @@
 !/Assembly-CSharp.csproj
 !/Assembly-CSharp-Editor.csproj
 !/Mesh2CS.sln
+!/[Aa]ssets/**/*.meta
 
 # Folder to not ignore
 !/Assets/
