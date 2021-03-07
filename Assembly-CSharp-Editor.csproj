@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/Editor/Mesh2ScriptWindow.cs" />
+    <Compile Include="Assets/Scripts/Editor/MeshSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -62,6 +62,10 @@ namespace RectangleTrainer.Mesh2Script
 
             string output = string.Format(template, classname, vertStr, trigStr, normStr);
 
+            if(File.Exists(path)) {
+                File.Delete(path);
+            }
+
             StreamWriter writer = new StreamWriter(path, true);
             writer.WriteLine(output);
             writer.Close();

@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-public class LoadScriptMesh : MonoBehaviour
+namespace RectangleTrainer.Mesh2Script.Demo
 {
-    void Start()
+    public class LoadScriptMesh : MonoBehaviour
     {
-        MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
-        MeshFilter mf = gameObject.AddComponent<MeshFilter>();
-        renderer.material = new Material(Shader.Find("Standard"));
+        void Start()
+        {
+            MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+            MeshFilter mf = gameObject.AddComponent<MeshFilter>();
+            renderer.material = new Material(Shader.Find("Standard"));
 
-        mf.mesh = RectangleTrainer.Mesh2Script.ScriptMesh.Mesh_dragon_hardcoded.Mesh;
+            mf.mesh = ScriptMesh.ScriptMesh_Wheel_Slice.Mesh;
+        }
     }
 }
