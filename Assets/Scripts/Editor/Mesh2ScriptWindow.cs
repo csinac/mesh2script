@@ -59,8 +59,7 @@ namespace RectangleTrainer.Mesh2Script.Editor
 
             if(EditorGUI.EndChangeCheck())
             {
-                inputScript = null;
-                inputMesh = null;
+                ResetOptions();
             }
         }
 
@@ -292,6 +291,15 @@ namespace RectangleTrainer.Mesh2Script.Editor
             return formatted;
         }
 
+        void ResetOptions()
+        {
+            inputScript = null;
+            inputMesh = null;
+
+            includeTriangles = true;
+            includeNormals = true;
+            includeUV = true;
+        }
         #endregion
     }
 }
