@@ -4,7 +4,7 @@ Mesh to script converter is a simple tool that converts a mesh into a C# script 
 There are uncommon but not entirely impossible scenarios where having the 3D data embedded right in the code is a better solution than keeping a mesh file.
 Or you might have a cpu intensive code that generates a mesh that would could be calculated once and get hardcoded into its own script. In any case, mesh to scrip converter let's you do exactly that.
 
-Once you add this into your project, the Rectangle Trainer menu will appear, from which you can open the editor window.
+Once you add this into your project, the Rectangle Trainer menu will appear, from which you can open the editor window.<br/>
 <img src="ReadmeContent/menu.png" width="25%">
 
 The input can either be an existing mesh<br/>
