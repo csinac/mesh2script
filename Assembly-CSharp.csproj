@@ -56,13 +56,14 @@
     <Analyzer Include="/Applications/Visual Studio.app/Contents/Resources/lib/monodevelop/AddIns/MonoDevelop.Unity/Analyzers/Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/Scripts/Mesh2Script.cs" />
-    <Compile Include="Assets/Demo/LoadScriptMesh.cs" />
     <Compile Include="Assets/Demo/SliceMaker.cs" />
-    <Compile Include="Assets/Scripts/AbstractMeshMaker.cs" />
+    <Compile Include="Assets/Scripts/Mesh2Script.cs" />
+    <Compile Include="Assets/RT Script Meshes/Capsule_ScriptMesh.cs" />
     <Compile Include="Assets/RT Script Meshes/Sphere_ScriptMesh.cs" />
     <Compile Include="Assets/RT Script Meshes/Wheel_Slice_ScriptMesh.cs" />
-    <Compile Include="Assets/RT Script Meshes/Capsule_ScriptMesh.cs" />
+    <Compile Include="Assets/Scripts/AbstractMeshMaker.cs" />
+    <Compile Include="Assets/Demo/LoadScriptMesh.cs" />
+    <Compile Include="Assets/RT Script Meshes/Cube_ScriptMesh.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets/Resources/ScriptMeshTemplate.txt" />
