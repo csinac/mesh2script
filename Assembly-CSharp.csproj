@@ -62,6 +62,7 @@
     <Compile Include="Assets/Scripts/AbstractMeshMaker.cs" />
     <Compile Include="Assets/RT Script Meshes/Sphere_ScriptMesh.cs" />
     <Compile Include="Assets/RT Script Meshes/Wheel_Slice_ScriptMesh.cs" />
+    <Compile Include="Assets/RT Script Meshes/Capsule_ScriptMesh.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets/Resources/ScriptMeshTemplate.txt" />

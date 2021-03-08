@@ -8,7 +8,7 @@ namespace RectangleTrainer.Mesh2Script.Demo
         {
             get
             {
-                return ScriptMesh.Sphere_ScriptMesh.Mesh;
+                return ScriptMesh.Wheel_Slice_ScriptMesh.Mesh;
             }
         }
 
