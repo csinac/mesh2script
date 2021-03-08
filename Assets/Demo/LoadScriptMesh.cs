@@ -8,9 +8,14 @@ namespace RectangleTrainer.Mesh2Script.Demo
         {
             MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
             MeshFilter mf = gameObject.AddComponent<MeshFilter>();
-            renderer.material = new Material(Shader.Find("Standard"));
+            renderer.material = new Material(Shader.Find("RT/Mesh2Script/CheckeredTestShader"));
 
-            mf.mesh = ScriptMesh.ScriptMesh_Wheel_Slice.Mesh;
+            mf.mesh = ScriptMesh.Sphere_ScriptMesh.Mesh;
+        }
+
+        private void Update()
+        {
+            transform.Rotate(Vector3.up, Time.deltaTime * 5);
         }
     }
 }

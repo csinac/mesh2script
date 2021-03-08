@@ -18,6 +18,7 @@ namespace RectangleTrainer.Mesh2Script
         Vector3[] vertices;
         Vector3[] normals;
         int[] triangles;
+        Vector2[] uv;
 
         string classname;
         string template;
@@ -34,11 +35,12 @@ namespace RectangleTrainer.Mesh2Script
             this.template = template;
         }
 
-        public void ConvertToScript(Vector3[] vertices, Vector3[] normals, int[] triangles)
+        public void ConvertToScript(Vector3[] vertices, Vector3[] normals, int[] triangles, Vector2[] uv)
         {
             this.vertices = vertices;
             this.normals = normals;
             this.triangles = triangles;
+            this.uv = uv;
 
             status.inProgress = true;
 
@@ -47,7 +49,7 @@ namespace RectangleTrainer.Mesh2Script
 
         }
 
-        public void ConvertToScript(Mesh mesh) => ConvertToScript(mesh.vertices, mesh.normals, mesh.triangles);
+        public void ConvertToScript(Mesh mesh) => ConvertToScript(mesh.vertices, mesh.normals, mesh.triangles, mesh.uv);
 
         public event Action OnComplete;
 
@@ -55,12 +57,29 @@ namespace RectangleTrainer.Mesh2Script
         {
             UpdateStatus("Writing vertices.");
             string vertStr = ArrayToString(vertices);
-            UpdateStatus("Writing triangles.");
-            string trigStr = ArrayToString(triangles);
-            UpdateStatus("Writing normals.");
-            string normStr = ArrayToString(normals);
 
-            string output = string.Format(template, classname, vertStr, trigStr, normStr);
+            string trigStr = "";
+            if (triangles != null)
+            {
+                UpdateStatus("Writing triangles.");
+                trigStr = ArrayToString(triangles);
+            }
+
+            string normStr = "";
+            if (normals != null)
+            {
+                UpdateStatus("Writing normals.");
+                normStr = ArrayToString(normals);
+            }
+
+            string uvStr = "";
+            if (uv != null)
+            {
+                UpdateStatus("Writing UVs.");
+                uvStr = ArrayToString(uv);
+            }
+
+            string output = string.Format(template, classname, vertStr, trigStr, normStr, uvStr);
 
             if(File.Exists(path)) {
                 File.Delete(path);
@@ -79,22 +98,42 @@ namespace RectangleTrainer.Mesh2Script
         {
             status.message = message;
             status.progress = progress;
-            Debug.Log($"{classname}: {message}");
+        }
+
+        private string ArrayToStringLoopIteration(string template, int linebreak, int total, int index, params string[] values)
+        {
+            string line = string.Format(template, values);
+            if (index < total - 1) line += ",";
+
+            if (index > 0 && index % linebreak == 0)
+                line += "\n\t\t\t";
+
+            status.progress = 1f * index / total;
+
+            return line;
         }
 
         private string ArrayToString(Vector3[] array) {
 
             string output = "";
+            string template = "{0}f, {1}f, {2}f";
 
             for (int i = 0; i < array.Length; i++)
             {
-                output += $"{array[i].x}f, {array[i].y}f, {array[i].z}f";
-                if (i < array.Length - 1) output += ",";
+                output += ArrayToStringLoopIteration(template, 3, array.Length, i, array[i].x.ToString(), array[i].y.ToString(), array[i].z.ToString());
+            }
 
-                if (i > 0 && i % 3 == 0)
-                    output += "\n\t\t\t";
+            return output;
+        }
 
-                status.progress = 1f * i / array.Length;
+        private string ArrayToString(Vector2[] array)
+        {
+            string output = "";
+            string template = "{0}f, {1}f";
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                output += ArrayToStringLoopIteration(template, 5, array.Length, i, array[i].x.ToString(), array[i].y.ToString());
             }
 
             return output;
@@ -103,16 +142,11 @@ namespace RectangleTrainer.Mesh2Script
         private string ArrayToString(int[] array)
         {
             string output = "";
+            string template = "{0}, {1}, {2}";
 
             for (int i = 0; i < array.Length; i += 3)
             {
-                output += $"{array[i]}, {array[i + 1]}, {array[i + 2]}";
-                if (i < array.Length - 1) output += ",";
-
-                if (i > 0 && i % 20 == 0)
-                    output += "\n\t\t\t";
-
-                status.progress = 1f * i / array.Length;
+                output += ArrayToStringLoopIteration(template, 18, array.Length, i, array[i].ToString(), array[i + 1].ToString(), array[i + 2].ToString());
             }
 
             return output;

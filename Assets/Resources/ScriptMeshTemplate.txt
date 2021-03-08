@@ -20,6 +20,11 @@ namespace RectangleTrainer.Mesh2Script.ScriptMesh
             {3}
 		}};
 
+        private static float[] uvList = 
+		{{
+            {4}
+		}};
+
 		public static Mesh Mesh
 		{{
 			get
@@ -31,7 +36,7 @@ namespace RectangleTrainer.Mesh2Script.ScriptMesh
 			}}
 		}}
 
-        private static Vector3[] FloatListToVector(ref float[] list) {{
+        private static Vector3[] FloatListToVector3(ref float[] list) {{
 			Vector3[] vectorArray = new Vector3[list.Length / 3];
             for(int i = 0; i < vectorArray.Length; i ++) {{
                 vectorArray[i] = new Vector3(list[i * 3], list[i * 3 + 1], list[i * 3 + 2]);
@@ -40,15 +45,32 @@ namespace RectangleTrainer.Mesh2Script.ScriptMesh
             return vectorArray;
         }}
 
+        private static Vector2[] FloatListToVector2(ref float[] list) {{
+			Vector2[] vectorArray = new Vector2[list.Length / 2];
+            for(int i = 0; i < vectorArray.Length; i ++) {{
+                vectorArray[i] = new Vector2(list[i * 2], list[i * 2 + 1]);
+            }}
+
+            return vectorArray;
+        }}
+
 		private static Mesh Make()
 		{{
-			Vector3[] vertices = FloatListToVector(ref vertList);
-			Vector3[] normals = FloatListToVector(ref nList);
+			Vector3[] vertices = FloatListToVector3(ref vertList);
+			Vector3[] normals = FloatListToVector3(ref nList);
+            Vector2[] uv = FloatListToVector2(ref uvList);
 
 			Mesh mesh = new Mesh();
 			mesh.vertices = vertices;
 			mesh.triangles = triangles;
 			mesh.normals = normals;
+            mesh.uv = uv;
+
+            if(mesh.normals.Length == 0) {{
+                mesh.RecalculateNormals();
+            }}
+
+            mesh.RecalculateBounds();
 
 			return mesh;
 		}}

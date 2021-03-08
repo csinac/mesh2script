@@ -59,13 +59,13 @@
     <Compile Include="Assets/Scripts/Mesh2Script.cs" />
     <Compile Include="Assets/Demo/LoadScriptMesh.cs" />
     <Compile Include="Assets/Demo/SliceMaker.cs" />
-    <Compile Include="Assets/RT Script Meshes/ScriptMesh_Capsule.cs" />
     <Compile Include="Assets/Scripts/AbstractMeshMaker.cs" />
-    <Compile Include="Assets/RT Script Meshes/ScriptMesh_Wheel_Slice.cs" />
-    <Compile Include="Assets/RT Script Meshes/ScriptMesh_default.cs" />
+    <Compile Include="Assets/RT Script Meshes/Sphere_ScriptMesh.cs" />
+    <Compile Include="Assets/RT Script Meshes/Wheel_Slice_ScriptMesh.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets/Resources/ScriptMeshTemplate.txt" />
+     <None Include="Assets/Resources/CheckeredTestShader.shader" />
     <Reference Include="UnityEngine">
       <HintPath>/Applications/Unity/Hub/Editor/2020.1.14f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

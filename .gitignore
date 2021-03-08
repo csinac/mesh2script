@@ -3,7 +3,6 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-/Assets/RT Script Meshes/
 
 # Files to not ignore
 !/.gitignore

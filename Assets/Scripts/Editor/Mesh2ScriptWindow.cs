@@ -11,13 +11,19 @@ namespace RectangleTrainer.Mesh2Script.Editor
         MonoScript inputScript;
 
         string saveFolder = "RT Script Meshes";
-        string scriptPrefix = "ScriptMesh";
+        string scriptSuffix = "ScriptMesh";
         string scriptName;
         string scriptTemplate = "";
 
         Mesh2Script scriptMaker;
         bool refresh = false;
         MeshSource source;
+
+        bool includeTriangles = true;
+        bool includeNormals = true;
+        bool includeUV = true;
+
+        Vector2 scrollPosition;
 
         #region Window Stuff
         [MenuItem("Rectangle Trainer/Mesh to Script")]
@@ -26,7 +32,6 @@ namespace RectangleTrainer.Mesh2Script.Editor
             Mesh2ScriptWindow window = (Mesh2ScriptWindow)GetWindow(typeof(Mesh2ScriptWindow));
             window.titleContent = new GUIContent("Mesh to Script");
             window.Show();
-            window.minSize = new Vector2(200, 230);
         }
 
         private void LoadTemplate()
@@ -96,6 +101,31 @@ namespace RectangleTrainer.Mesh2Script.Editor
             }
         }
 
+        void OptionsSection()
+        {
+            EditorGUI.BeginDisabledGroup(inputMesh == null);
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.BeginVertical();
+            GUILayout.Label("Triangles");
+            includeTriangles = EditorGUILayout.Toggle(includeTriangles);
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.BeginVertical();
+            GUILayout.Label("Normals");
+            includeNormals = EditorGUILayout.Toggle(includeNormals);
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.BeginVertical();
+            GUILayout.Label("UV");
+            includeUV = EditorGUILayout.Toggle(includeUV);
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUI.EndDisabledGroup();
+        }
+
+
         void SaveSection()
         {
             EditorGUILayout.LabelField("Save Folder", EditorStyles.boldLabel);
@@ -127,12 +157,16 @@ namespace RectangleTrainer.Mesh2Script.Editor
 
         void OnGUI()
         {
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
             SourceTypeSection();
+            OptionsSection();
             InputSection();
             SaveSection();
 
             ShowProgressBar();
+
+            EditorGUILayout.EndScrollView();
         }
         #endregion
 
@@ -148,7 +182,7 @@ namespace RectangleTrainer.Mesh2Script.Editor
         }
         string Classname
         {
-            get => $"{scriptPrefix}_{scriptName}";
+            get => $"{scriptName}_{scriptSuffix}";
         }
         #endregion
 
@@ -192,21 +226,29 @@ namespace RectangleTrainer.Mesh2Script.Editor
 
         private string SizeMaxEstimate()
         {
-            int vertSize = inputMesh.vertexCount * 3 * 13 * 2; //three axis, max. floating decimals, commas and space, position and normal
-            int trigSize = inputMesh.triangles.Length * Mathf.CeilToInt(Mathf.Log10(inputMesh.triangles.Length));
+            int totalSize = scriptTemplate.Length;
+            totalSize += inputMesh.vertexCount * 3 * 13; //three axis, max. floating decimals, commas and space
 
-            float sum = vertSize + trigSize + scriptTemplate.Length;
+            if(includeTriangles)
+                totalSize += inputMesh.triangles.Length * (Mathf.CeilToInt(Mathf.Log10(inputMesh.triangles.Length)) + 2); //max possible index length, comma and space
+
+            if(includeNormals)
+                totalSize += inputMesh.vertexCount * 3 * 13; //three axis, max. floating decimals, commas and space
+
+            if (includeUV)
+                totalSize += inputMesh.uv.Length * 2 * 13;
+
             int kpow = 0;
 
-            while(sum > 1024)
+            while(totalSize > 1024)
             {
-                sum /= 1024;
+                totalSize /= 1024;
                 kpow++;
             }
 
             string[] unit = { "b", "kb", "mb" };
 
-            return $"{sum.ToString("N1")} {unit[kpow]}";
+            return $"{totalSize.ToString("N1")} {unit[kpow]}";
         }
 
         void BuildMeshScript()
@@ -220,8 +262,12 @@ namespace RectangleTrainer.Mesh2Script.Editor
             string path = "Assets/" + Filename;
 
             scriptMaker.Initialize(path, Classname, scriptTemplate);
-            scriptMaker.ConvertToScript(inputMesh);
 
+
+            scriptMaker.ConvertToScript(vertices:   inputMesh.vertices,
+                                        normals:    includeNormals ? inputMesh.normals : null,
+                                        triangles:  includeTriangles ? inputMesh.triangles : null,
+                                        uv:         includeUV ? inputMesh.uv : null);
         }
  
 
@@ -245,6 +291,7 @@ namespace RectangleTrainer.Mesh2Script.Editor
 
             return formatted;
         }
+
         #endregion
     }
 }
